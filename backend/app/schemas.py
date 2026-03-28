@@ -6,6 +6,10 @@ class SearchRequest(BaseModel):
     destination: str   # IATA
     date: str          # YYYY-MM-DD
 
+class MultiLegSearchRequest(BaseModel):
+    legs: List[dict]   # [{"origin": "KUL", "destination": "SIN"}, ...]
+    date: str          # YYYY-MM-DD
+
 class FlightLegSchema(BaseModel):
     flight_number: str
     airline: str
@@ -21,8 +25,24 @@ class FlightLegSchema(BaseModel):
     reliability_score: int
     risk_level: str
 
+class ConnectionSchema(BaseModel):
+    connection_time_minutes: int
+    connection_risk: str
+    is_safe: bool
+
+class ItinerarySchema(BaseModel):
+    flights: List[FlightLegSchema]
+    connections: List[ConnectionSchema]
+    overall_risk_level: str
+    overall_reliability_score: int
+    overall_disruption_probability: float
+
 class SearchResponse(BaseModel):
     origin: str
     destination: str
     date: str
     flights: List[FlightLegSchema]
+
+class MultiLegSearchResponse(BaseModel):
+    itineraries: List[ItinerarySchema]
+
