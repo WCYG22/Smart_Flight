@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 load_dotenv()
 FLIGHTLABS_KEY = os.getenv("FLIGHTLABS_KEY")
 
-BASE_URL = "https://api.flightlabs.io/v1/flights"
+BASE_URL = "https://app.goflightlabs.com/advanced-flights-schedules"
 
 def fetch_flights(origin: str, destination: str, date: str) -> List[FlightLeg]:
     """
@@ -20,19 +20,13 @@ def fetch_flights(origin: str, destination: str, date: str) -> List[FlightLeg]:
     if not FLIGHTLABS_KEY:
         raise RuntimeError("FLIGHTLABS_KEY not set in environment")
     
-    # Parse the date
     try:
-        flight_date = datetime.strptime(date, "%Y-%m-%d")
-    except ValueError:
-        raise ValueError("Date must be in YYYY-MM-DD format")
-    
-    try:
-        # Query FlightLabs API
+        # Query FlightLabs API for departure airport schedules
         params = {
             "access_key": FLIGHTLABS_KEY,
-            "dep_iata": origin,
-            "arr_iata": destination,
-            "flight_date": date
+            "iataCode": origin,
+            "type": "departure",
+            "date": date
         }
         
         response = requests.get(BASE_URL, params=params, timeout=10)
@@ -44,20 +38,25 @@ def fetch_flights(origin: str, destination: str, date: str) -> List[FlightLeg]:
         if not raw_flights:
             return flights
         
-        # Extract flight information
+        # Filter flights by destination and extract information
         for flight in raw_flights:
-            flight_number = flight.get("flight_number") or flight.get("flight_iata") or "N/A"
+            # Check if destination matches
+            arr_iata = flight.get("arr_iata")
+            if arr_iata != destination:
+                continue
+            
+            flight_number = flight.get("flight_iata") or flight.get("flight_number") or "N/A"
             airline_name = flight.get("airline_name") or "Unknown"
             
             # Get times
-            scheduled_dep = flight.get("departure_scheduled")
-            actual_dep = flight.get("departure_actual")
-            scheduled_arr = flight.get("arrival_scheduled")
-            actual_arr = flight.get("arrival_actual")
+            scheduled_dep = flight.get("dep_time")
+            actual_dep = flight.get("dep_actual")
+            scheduled_arr = flight.get("arr_time")
+            actual_arr = flight.get("arr_actual")
             
             # Get status and delay
-            status = flight.get("flight_status") or "scheduled"
-            delay_minutes = flight.get("departure_delay")
+            status = flight.get("status") or "scheduled"
+            delay_minutes = flight.get("dep_delayed")
             
             flights.append(
                 FlightLeg(
