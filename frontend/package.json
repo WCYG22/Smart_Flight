@@ -1,0 +1,13 @@
+{
+  "name": "smartflight-frontend",
+  "version": "1.0.0",
+  "description": "SmartFlight - Disruption Risk Assistant",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "echo 'No build needed for static HTML'"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
