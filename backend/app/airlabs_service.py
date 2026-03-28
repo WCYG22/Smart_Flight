@@ -4,21 +4,21 @@ from dotenv import load_dotenv
 from typing import List
 from .models import FlightLeg
 from datetime import datetime, timedelta
-import random
 
 load_dotenv()
-CLIENT_ID = os.getenv("OPENSKY_CLIENT_ID")
-CLIENT_SECRET = os.getenv("OPENSKY_CLIENT_SECRET")
+FLIGHTLABS_KEY = os.getenv("FLIGHTLABS_KEY")
 
-BASE_URL = "https://opensky-network.org/api/v2/flights/departure"
+BASE_URL = "https://api.flightlabs.io/v1/flights"
 
 def fetch_flights(origin: str, destination: str, date: str) -> List[FlightLeg]:
     """
-    Fetch flights from OpenSky Network.
-    For Phase 1, we generate realistic sample flights based on the route and date.
+    Fetch real flights from FlightLabs API.
     """
     
     flights: List[FlightLeg] = []
+    
+    if not FLIGHTLABS_KEY:
+        raise RuntimeError("FLIGHTLABS_KEY not set in environment")
     
     # Parse the date
     try:
@@ -26,55 +26,55 @@ def fetch_flights(origin: str, destination: str, date: str) -> List[FlightLeg]:
     except ValueError:
         raise ValueError("Date must be in YYYY-MM-DD format")
     
-    # Generate 5-8 realistic sample flights for this route
-    num_flights = random.randint(5, 8)
-    airlines = ["MH", "AK", "SQ", "TR", "FD", "BJ", "3K"]
-    
-    for i in range(num_flights):
-        airline = random.choice(airlines)
-        flight_number = f"{airline}{random.randint(100, 999)}"
+    try:
+        # Query FlightLabs API
+        params = {
+            "access_key": FLIGHTLABS_KEY,
+            "dep_iata": origin,
+            "arr_iata": destination,
+            "flight_date": date
+        }
         
-        # Random departure time between 6 AM and 10 PM
-        dep_hour = random.randint(6, 22)
-        dep_minute = random.choice([0, 15, 30, 45])
-        scheduled_dep = f"{flight_date.strftime('%Y-%m-%d')}T{dep_hour:02d}:{dep_minute:02d}:00Z"
+        response = requests.get(BASE_URL, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
         
-        # Flight duration 1-4 hours
-        flight_duration = random.randint(60, 240)
-        arr_time = datetime.strptime(scheduled_dep, "%Y-%m-%dT%H:%M:%SZ") + timedelta(minutes=flight_duration)
-        scheduled_arr = arr_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+        raw_flights = data.get("data", []) or []
         
-        # Status and delay
-        status_choice = random.random()
-        if status_choice < 0.7:
-            status = "scheduled"
-            delay = 0
-        elif status_choice < 0.85:
-            status = "scheduled"
-            delay = random.randint(5, 45)
-        elif status_choice < 0.95:
-            status = "delayed"
-            delay = random.randint(30, 120)
-        else:
-            status = "cancelled"
-            delay = None
+        if not raw_flights:
+            return flights
         
-        actual_dep = None
-        actual_arr = None
-        
-        flights.append(
-            FlightLeg(
-                flight_number=flight_number,
-                airline=f"{airline} Airlines",
-                origin=origin,
-                destination=destination,
-                scheduled_departure=scheduled_dep,
-                scheduled_arrival=scheduled_arr,
-                actual_departure=actual_dep,
-                actual_arrival=actual_arr,
-                delay_minutes=delay,
-                status=status,
+        # Extract flight information
+        for flight in raw_flights:
+            flight_number = flight.get("flight_number") or flight.get("flight_iata") or "N/A"
+            airline_name = flight.get("airline_name") or "Unknown"
+            
+            # Get times
+            scheduled_dep = flight.get("departure_scheduled")
+            actual_dep = flight.get("departure_actual")
+            scheduled_arr = flight.get("arrival_scheduled")
+            actual_arr = flight.get("arrival_actual")
+            
+            # Get status and delay
+            status = flight.get("flight_status") or "scheduled"
+            delay_minutes = flight.get("departure_delay")
+            
+            flights.append(
+                FlightLeg(
+                    flight_number=flight_number,
+                    airline=airline_name,
+                    origin=origin,
+                    destination=destination,
+                    scheduled_departure=scheduled_dep,
+                    scheduled_arrival=scheduled_arr,
+                    actual_departure=actual_dep,
+                    actual_arrival=actual_arr,
+                    delay_minutes=delay_minutes,
+                    status=status,
+                )
             )
-        )
-    
-    return flights
+        
+        return flights[:10]  # Limit to 10 flights
+        
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"FlightLabs API error: {str(e)}")
