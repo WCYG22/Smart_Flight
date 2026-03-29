@@ -5,15 +5,17 @@ from typing import List
 from .models import FlightLeg
 from datetime import datetime, timedelta
 import random
+import base64
 
 load_dotenv()
 
-FLIGHTLABS_KEY = os.getenv("FLIGHTLABS_KEY")
-FLIGHTLABS_API = "https://app.goflightlabs.com/advanced-flights-schedules"
+OPENSKY_USERNAME = os.getenv("OPENSKY_CLIENT_ID")
+OPENSKY_PASSWORD = os.getenv("OPENSKY_CLIENT_SECRET")
+OPENSKY_API = "https://opensky-network.org/api"
 
 def fetch_flights(origin: str, destination: str, date: str) -> List[FlightLeg]:
     """
-    Fetch real flights from FlightLabs API with fallback to sample data.
+    Fetch real flights from OpenSky Network API with fallback to sample data.
     """
     
     flights: List[FlightLeg] = []
@@ -24,47 +26,51 @@ def fetch_flights(origin: str, destination: str, date: str) -> List[FlightLeg]:
     except ValueError:
         raise ValueError("Date must be in YYYY-MM-DD format")
     
-    # Try to fetch from FlightLabs API
+    # Try to fetch from OpenSky Network API
     try:
+        # Create basic auth header
+        auth_string = base64.b64encode(f"{OPENSKY_USERNAME}:{OPENSKY_PASSWORD}".encode()).decode()
+        headers = {"Authorization": f"Basic {auth_string}"}
+        
+        # OpenSky API endpoint for flights
         params = {
-            "api_key": FLIGHTLABS_KEY,
-            "dep_iata": origin,
-            "arr_iata": destination,
-            "flight_date": date
+            "begin": int(flight_date.timestamp()),
+            "end": int((flight_date + timedelta(days=1)).timestamp()),
+            "departure": origin,
+            "arrival": destination
         }
         
-        response = requests.get(FLIGHTLABS_API, params=params, timeout=10)
+        response = requests.get(f"{OPENSKY_API}/flights/departure", params=params, headers=headers, timeout=10)
         
         if response.status_code == 200:
             data = response.json()
             
-            if data.get("success") and data.get("data"):
-                for flight_data in data.get("data", [])[:10]:
+            if isinstance(data, list) and len(data) > 0:
+                for flight_data in data[:10]:
                     try:
                         # Extract flight information
-                        flight_number = flight_data.get("flight_iata", "N/A")
-                        airline_name = flight_data.get("airline_name", "Unknown Airline")
+                        flight_number = flight_data.get("callsign", "N/A").strip()
+                        airline_name = flight_data.get("airline", "Unknown Airline")
                         
                         # Parse times
-                        dep_time = flight_data.get("departure", {}).get("scheduled")
-                        arr_time = flight_data.get("arrival", {}).get("scheduled")
+                        dep_time_unix = flight_data.get("firstSeen")
+                        arr_time_unix = flight_data.get("lastSeen")
                         
-                        # Get actual times if available
-                        actual_dep = flight_data.get("departure", {}).get("actual")
-                        actual_arr = flight_data.get("arrival", {}).get("actual")
+                        if dep_time_unix and arr_time_unix:
+                            dep_time = datetime.utcfromtimestamp(dep_time_unix).isoformat() + "Z"
+                            arr_time = datetime.utcfromtimestamp(arr_time_unix).isoformat() + "Z"
+                        else:
+                            continue
                         
-                        # Calculate delay if actual time exists
-                        delay_minutes = None
-                        if actual_dep and dep_time:
-                            try:
-                                dep_dt = datetime.fromisoformat(dep_time.replace('Z', '+00:00'))
-                                actual_dep_dt = datetime.fromisoformat(actual_dep.replace('Z', '+00:00'))
-                                delay_minutes = int((actual_dep_dt - dep_dt).total_seconds() / 60)
-                            except:
-                                pass
+                        # Get actual times (OpenSky provides actual times)
+                        actual_dep = dep_time
+                        actual_arr = arr_time
+                        
+                        # Calculate delay
+                        delay_minutes = 0
                         
                         # Get flight status
-                        status = flight_data.get("status", "scheduled")
+                        status = "completed" if arr_time_unix else "scheduled"
                         
                         flights.append(
                             FlightLeg(
@@ -87,7 +93,7 @@ def fetch_flights(origin: str, destination: str, date: str) -> List[FlightLeg]:
                 if flights:
                     return flights
     except Exception as e:
-        print(f"FlightLabs API error: {e}")
+        print(f"OpenSky API error: {e}")
     
     # Fallback to sample data if API fails
     return generate_sample_flights(origin, destination, flight_date)
