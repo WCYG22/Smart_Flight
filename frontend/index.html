@@ -1033,6 +1033,8 @@
             alternativesSection.scrollIntoView({ behavior: 'smooth' });
 
             try {
+                console.log('Fetching alternatives for:', origin, destination, date);
+                
                 // Fetch alternatives
                 const altResponse = await fetch(API_BASE + '/alternatives', {
                     method: 'POST',
@@ -1040,8 +1042,14 @@
                     body: JSON.stringify({ origin, destination, date })
                 });
 
-                if (!altResponse.ok) throw new Error('Failed to fetch alternatives');
+                console.log('Alternatives response status:', altResponse.status);
+                
+                if (!altResponse.ok) {
+                    const errorText = await altResponse.text();
+                    throw new Error(`Failed to fetch alternatives: ${altResponse.status} - ${errorText}`);
+                }
                 const altData = await altResponse.json();
+                console.log('Alternatives data:', altData);
 
                 // Fetch recommendations
                 const recResponse = await fetch(API_BASE + '/recommendations', {
@@ -1050,8 +1058,14 @@
                     body: JSON.stringify({ origin, destination, date })
                 });
 
-                if (!recResponse.ok) throw new Error('Failed to fetch recommendations');
+                console.log('Recommendations response status:', recResponse.status);
+                
+                if (!recResponse.ok) {
+                    const errorText = await recResponse.text();
+                    throw new Error(`Failed to fetch recommendations: ${recResponse.status} - ${errorText}`);
+                }
                 const recData = await recResponse.json();
+                console.log('Recommendations data:', recData);
 
                 displayAlternatives(altData.alternatives);
                 displayRecommendations(recData);
