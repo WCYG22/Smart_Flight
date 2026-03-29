@@ -5,6 +5,7 @@ from .schemas import SearchRequest, SearchResponse, FlightLegSchema, MultiLegSea
 from .airlabs_service import fetch_flights
 from .risk_calculator import compute_risk
 from .connection_analyzer import analyze_connection, calculate_itinerary_risk
+from .alternative_routes import find_alternative_routes, get_route_recommendations
 
 app = FastAPI(title="SmartFlight – Phase 2 Multi-Leg")
 
@@ -135,6 +136,116 @@ def search_multi_leg(req: MultiLegSearchRequest):
             )
         
         return MultiLegSearchResponse(itineraries=itineraries)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Error: {e}")
+
+
+@app.post("/alternatives")
+def get_alternatives(req: SearchRequest):
+    """
+    Get alternative route suggestions for a high-risk itinerary.
+    UC004: View Alternative Itineraries
+    """
+    try:
+        # Fetch all available flights for this route
+        all_flights = fetch_flights(req.origin, req.destination, req.date)
+        
+        if not all_flights:
+            raise HTTPException(status_code=404, detail="No flights found for this route")
+        
+        # Determine current risk level (assume high-risk if user is asking for alternatives)
+        current_risk = "high"
+        
+        # Find alternatives
+        alternatives = find_alternative_routes(
+            req.origin,
+            req.destination,
+            req.date,
+            current_risk,
+            all_flights,
+            max_alternatives=3
+        )
+        
+        # Convert to response format
+        alternative_flights = []
+        for alt in alternatives:
+            flight = alt["flights"][0]
+            alternative_flights.append({
+                "flight_number": flight.flight_number,
+                "airline": flight.airline,
+                "origin": flight.origin,
+                "destination": flight.destination,
+                "scheduled_departure": flight.scheduled_departure,
+                "scheduled_arrival": flight.scheduled_arrival,
+                "status": flight.status,
+                "delay_minutes": flight.delay_minutes,
+                "disruption_probability": alt["disruption_probability"],
+                "reliability_score": alt["reliability_score"],
+                "risk_level": alt["risk_level"],
+                "reason": alt["reason"],
+                "type": alt["type"],
+                "duration_minutes": alt.get("total_duration_minutes", 0)
+            })
+        
+        return {
+            "origin": req.origin,
+            "destination": req.destination,
+            "date": req.date,
+            "alternatives": alternative_flights,
+            "count": len(alternative_flights)
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Error: {e}")
+
+
+@app.post("/recommendations")
+def get_recommendations(req: SearchRequest):
+    """
+    Get route recommendations (best overall, fastest, most reliable).
+    Helps users make informed decisions.
+    """
+    try:
+        # Fetch all available flights
+        all_flights = fetch_flights(req.origin, req.destination, req.date)
+        
+        if not all_flights:
+            raise HTTPException(status_code=404, detail="No flights found for this route")
+        
+        # Get recommendations
+        recommendations = get_route_recommendations(
+            req.origin,
+            req.destination,
+            req.date,
+            all_flights
+        )
+        
+        # Convert to response format
+        result = {}
+        for rec_type, rec_data in recommendations.items():
+            flight = rec_data["flight"]
+            result[rec_type] = {
+                "flight_number": flight.flight_number,
+                "airline": flight.airline,
+                "origin": flight.origin,
+                "destination": flight.destination,
+                "scheduled_departure": flight.scheduled_departure,
+                "scheduled_arrival": flight.scheduled_arrival,
+                "status": flight.status,
+                "delay_minutes": flight.delay_minutes,
+                "disruption_probability": rec_data["disruption_probability"],
+                "reliability_score": rec_data["reliability_score"],
+                "risk_level": rec_data["risk_level"],
+                "reason": rec_data["reason"],
+                "duration_minutes": rec_data.get("duration_minutes", 0)
+            }
+        
+        return result
         
     except HTTPException:
         raise

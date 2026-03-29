@@ -522,6 +522,83 @@
             border-left-color: #ff3b30;
         }
 
+        .alternatives-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .alternatives-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .alternative-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #34c759;
+            transition: all 0.2s;
+        }
+
+        .alternative-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            transform: translateX(4px);
+        }
+
+        .alternative-reason {
+            font-size: 13px;
+            color: #0066cc;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reason-icon {
+            font-size: 16px;
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .recommendation-card:hover {
+            border-color: #0066cc;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+        }
+
+        .recommendation-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0066cc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .recommendation-reason {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
         .flight-preview-header {
             display: flex;
             justify-content: space-between;
@@ -800,6 +877,25 @@
         </div>
     </section>
 
+    <!-- Alternatives Section -->
+    <section class="demo-section" id="alternativesSection" style="display: none;">
+        <div class="demo-header">
+            <h2>Better Alternatives Available</h2>
+            <p>We found safer options for your route</p>
+        </div>
+
+        <div class="demo-container">
+            <div style="flex: 1;">
+                <div id="alternativesContainer"></div>
+            </div>
+            <div style="flex: 1;">
+                <div id="recommendationsContainer"></div>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="backToSearch()" style="margin-top: 20px;">← Back to Search</button>
+    </section>
+
     <!-- Stats Section -->
     <section class="stats" id="stats">
         <div class="stat">
@@ -893,6 +989,7 @@
                     </div>
                     <div class="flight-preview-route">${flight.origin} → ${flight.destination}</div>
                     <div class="flight-preview-time">${depTime} - ${arrTime} • Reliability: ${flight.reliability_score}%</div>
+                    ${riskLevel === 'high' ? `<button class="btn-primary" style="margin-top: 12px; padding: 8px 16px; font-size: 14px;" onclick="showAlternatives('${flight.origin}', '${flight.destination}', '${document.getElementById('date').value}')">View Alternatives</button>` : ''}
                 `;
 
                 flightPreview.style.animationDelay = `${index * 0.1}s`;
@@ -923,3 +1020,121 @@
     </script>
 </body>
 </html>
+
+        // Phase 3: Alternative Routes
+        async function showAlternatives(origin, destination, date) {
+            const alternativesSection = document.getElementById('alternativesSection');
+            const alternativesContainer = document.getElementById('alternativesContainer');
+            const recommendationsContainer = document.getElementById('recommendationsContainer');
+
+            alternativesContainer.innerHTML = '<div class="loading">Finding safer alternatives...</div>';
+            recommendationsContainer.innerHTML = '<div class="loading">Analyzing recommendations...</div>';
+            alternativesSection.style.display = 'block';
+            alternativesSection.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                // Fetch alternatives
+                const altResponse = await fetch(API_BASE + '/alternatives', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ origin, destination, date })
+                });
+
+                if (!altResponse.ok) throw new Error('Failed to fetch alternatives');
+                const altData = await altResponse.json();
+
+                // Fetch recommendations
+                const recResponse = await fetch(API_BASE + '/recommendations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ origin, destination, date })
+                });
+
+                if (!recResponse.ok) throw new Error('Failed to fetch recommendations');
+                const recData = await recResponse.json();
+
+                displayAlternatives(altData.alternatives);
+                displayRecommendations(recData);
+            } catch (error) {
+                console.error('Error:', error);
+                alternativesContainer.innerHTML = `<div class="error-message">Failed to load alternatives: ${error.message}</div>`;
+                recommendationsContainer.innerHTML = '';
+            }
+        }
+
+        function displayAlternatives(alternatives) {
+            const container = document.getElementById('alternativesContainer');
+            container.innerHTML = '<h3 style="margin-bottom: 16px; color: #1a1a1a;">Safer Alternatives</h3>';
+
+            if (!alternatives || alternatives.length === 0) {
+                container.innerHTML += '<p style="color: #666;">No safer alternatives available for this route.</p>';
+                return;
+            }
+
+            alternatives.forEach((alt, index) => {
+                const riskLevel = alt.risk_level.toLowerCase();
+                const depTime = alt.scheduled_departure ? alt.scheduled_departure.substring(11, 16) : 'N/A';
+                const arrTime = alt.scheduled_arrival ? alt.scheduled_arrival.substring(11, 16) : 'N/A';
+                const reasonIcon = alt.type === 'direct' ? '✈️' : alt.type === 'different_airline' ? '🔄' : '⏰';
+
+                const card = document.createElement('div');
+                card.className = 'alternative-card';
+                card.innerHTML = `
+                    <div class="alternative-reason">
+                        <span class="reason-icon">${reasonIcon}</span>
+                        <span>${alt.reason}</span>
+                    </div>
+                    <div class="flight-preview-header">
+                        <span class="flight-preview-airline">${alt.flight_number}</span>
+                        <span class="risk-badge ${riskLevel}">${alt.risk_level}</span>
+                    </div>
+                    <div class="flight-preview-route">${alt.origin} → ${alt.destination}</div>
+                    <div class="flight-preview-time">${depTime} - ${arrTime}</div>
+                    <div style="margin-top: 8px; font-size: 13px; color: #666;">
+                        Reliability: <strong>${alt.reliability_score}%</strong> • Risk: <strong>${Math.round(alt.disruption_probability * 100)}%</strong>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function displayRecommendations(recommendations) {
+            const container = document.getElementById('recommendationsContainer');
+            container.innerHTML = '<h3 style="margin-bottom: 16px; color: #1a1a1a;">Top Recommendations</h3>';
+
+            const recTypes = [
+                { key: 'most_reliable', label: '⭐ Most Reliable', icon: '🎯' },
+                { key: 'fastest', label: '⚡ Fastest', icon: '🚀' },
+                { key: 'best_balance', label: '⚖️ Best Balance', icon: '✨' }
+            ];
+
+            recTypes.forEach(rec => {
+                if (recommendations[rec.key]) {
+                    const data = recommendations[rec.key];
+                    const riskLevel = data.risk_level.toLowerCase();
+                    const depTime = data.scheduled_departure ? data.scheduled_departure.substring(11, 16) : 'N/A';
+                    const arrTime = data.scheduled_arrival ? data.scheduled_arrival.substring(11, 16) : 'N/A';
+
+                    const card = document.createElement('div');
+                    card.className = 'recommendation-card';
+                    card.innerHTML = `
+                        <div class="recommendation-label">${rec.label}</div>
+                        <div class="recommendation-reason">${data.reason}</div>
+                        <div style="font-weight: 600; margin-bottom: 8px;">${data.flight_number}</div>
+                        <div style="font-size: 13px; color: #666; margin-bottom: 8px;">
+                            ${depTime} - ${arrTime}
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <span class="risk-badge ${riskLevel}">${data.risk_level}</span>
+                            <span style="font-size: 12px; color: #666;">Reliability: ${data.reliability_score}%</span>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+        }
+
+        function backToSearch() {
+            document.getElementById('alternativesSection').style.display = 'none';
+            document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+        }
