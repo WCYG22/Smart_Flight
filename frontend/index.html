@@ -1078,10 +1078,11 @@
 
         function displayAlternatives(alternatives) {
             const container = document.getElementById('alternativesContainer');
-            container.innerHTML = '<h3 style="margin-bottom: 16px; color: #1a1a1a;">Safer Alternatives</h3>';
+            let html = '<h3 style="margin-bottom: 16px; color: #1a1a1a;">Safer Alternatives</h3>';
 
             if (!alternatives || alternatives.length === 0) {
-                container.innerHTML += '<p style="color: #666;">No safer alternatives available for this route.</p>';
+                html += '<p style="color: #666;">No safer alternatives available for this route.</p>';
+                container.innerHTML = html;
                 return;
             }
 
@@ -1091,30 +1092,31 @@
                 const arrTime = alt.scheduled_arrival ? alt.scheduled_arrival.substring(11, 16) : 'N/A';
                 const reasonIcon = alt.type === 'direct' ? '✈️' : alt.type === 'different_airline' ? '🔄' : '⏰';
 
-                const card = document.createElement('div');
-                card.className = 'alternative-card';
-                card.innerHTML = `
-                    <div class="alternative-reason">
-                        <span class="reason-icon">${reasonIcon}</span>
-                        <span>${alt.reason}</span>
-                    </div>
-                    <div class="flight-preview-header">
-                        <span class="flight-preview-airline">${alt.flight_number}</span>
-                        <span class="risk-badge ${riskLevel}">${alt.risk_level}</span>
-                    </div>
-                    <div class="flight-preview-route">${alt.origin} → ${alt.destination}</div>
-                    <div class="flight-preview-time">${depTime} - ${arrTime}</div>
-                    <div style="margin-top: 8px; font-size: 13px; color: #666;">
-                        Reliability: <strong>${alt.reliability_score}%</strong> • Risk: <strong>${Math.round(alt.disruption_probability * 100)}%</strong>
+                html += `
+                    <div class="alternative-card">
+                        <div class="alternative-reason">
+                            <span class="reason-icon">${reasonIcon}</span>
+                            <span>${alt.reason}</span>
+                        </div>
+                        <div class="flight-preview-header">
+                            <span class="flight-preview-airline">${alt.flight_number}</span>
+                            <span class="risk-badge ${riskLevel}">${alt.risk_level}</span>
+                        </div>
+                        <div class="flight-preview-route">${alt.origin} → ${alt.destination}</div>
+                        <div class="flight-preview-time">${depTime} - ${arrTime}</div>
+                        <div style="margin-top: 8px; font-size: 13px; color: #666;">
+                            Reliability: <strong>${alt.reliability_score}%</strong> • Risk: <strong>${Math.round(alt.disruption_probability * 100)}%</strong>
+                        </div>
                     </div>
                 `;
-                container.appendChild(card);
             });
+            
+            container.innerHTML = html;
         }
 
         function displayRecommendations(recommendations) {
             const container = document.getElementById('recommendationsContainer');
-            container.innerHTML = '<h3 style="margin-bottom: 16px; color: #1a1a1a;">Top Recommendations</h3>';
+            let html = '<h3 style="margin-bottom: 16px; color: #1a1a1a;">Top Recommendations</h3>';
 
             const recTypes = [
                 { key: 'most_reliable', label: '⭐ Most Reliable', icon: '🎯' },
@@ -1129,23 +1131,24 @@
                     const depTime = data.scheduled_departure ? data.scheduled_departure.substring(11, 16) : 'N/A';
                     const arrTime = data.scheduled_arrival ? data.scheduled_arrival.substring(11, 16) : 'N/A';
 
-                    const card = document.createElement('div');
-                    card.className = 'recommendation-card';
-                    card.innerHTML = `
-                        <div class="recommendation-label">${rec.label}</div>
-                        <div class="recommendation-reason">${data.reason}</div>
-                        <div style="font-weight: 600; margin-bottom: 8px;">${data.flight_number}</div>
-                        <div style="font-size: 13px; color: #666; margin-bottom: 8px;">
-                            ${depTime} - ${arrTime}
-                        </div>
-                        <div style="display: flex; gap: 8px;">
-                            <span class="risk-badge ${riskLevel}">${data.risk_level}</span>
-                            <span style="font-size: 12px; color: #666;">Reliability: ${data.reliability_score}%</span>
+                    html += `
+                        <div class="recommendation-card">
+                            <div class="recommendation-label">${rec.label}</div>
+                            <div class="recommendation-reason">${data.reason}</div>
+                            <div style="font-weight: 600; margin-bottom: 8px;">${data.flight_number}</div>
+                            <div style="font-size: 13px; color: #666; margin-bottom: 8px;">
+                                ${depTime} - ${arrTime}
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <span class="risk-badge ${riskLevel}">${data.risk_level}</span>
+                                <span style="font-size: 12px; color: #666;">Reliability: ${data.reliability_score}%</span>
+                            </div>
                         </div>
                     `;
-                    container.appendChild(card);
                 }
             });
+            
+            container.innerHTML = html;
         }
 
         function backToSearch() {
