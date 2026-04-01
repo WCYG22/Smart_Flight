@@ -50,7 +50,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--primary-color);
             cursor: pointer;
@@ -62,54 +62,20 @@
         }
 
         .logo-icon {
-            font-size: 24px;
-            width: 24px;
-            height: 24px;
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
             background: var(--primary-color);
             border-radius: 6px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: width 0.2s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
         }
 
         .get-app-btn {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 10px 24px;
+            padding: 12px 32px;
             border-radius: 8px;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             transition: all 0.2s;
             cursor: pointer;
@@ -1179,12 +1145,7 @@
             <span class="logo-icon"></span>
             <span>SmartFlight</span>
         </div>
-        <ul class="nav-links">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#demo">Try It</a></li>
-            <li><a href="#stats">Stats</a></li>
-        </ul>
-        <button class="get-app-btn" onclick="document.getElementById('demo').scrollIntoView({behavior: 'smooth'})">Get Started</button>
+        <button class="get-app-btn" onclick="document.getElementById('demo').scrollIntoView({behavior: 'smooth'})">Search Flights</button>
     </nav>
 
     <!-- Hero Section -->
