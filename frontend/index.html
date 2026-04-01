@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartFlight - Flight Disruption Risk Assistant</title>
     <style>
+        :root {
+            --primary-color: var(--primary-color);
+            --primary-dark: var(--primary-dark);
+            --primary-light: var(--primary-light);
+            --text-primary: var(--text-primary);
+            --text-secondary: var(--text-secondary);
+            --border-color: var(--border-color);
+            --bg-light: var(--bg-light);
+            --success: var(--success);
+            --warning: var(--warning);
+            --danger: var(--danger);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +26,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-            color: #1a1a1a;
+            color: var(--text-primary);
             background: #ffffff;
             overflow-x: hidden;
         }
@@ -25,7 +38,7 @@
             align-items: center;
             padding: 20px 80px;
             background: white;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -38,7 +51,7 @@
             gap: 10px;
             font-size: 20px;
             font-weight: 700;
-            color: #1a1a1a;
+            color: var(--primary-color);
             cursor: pointer;
             transition: opacity 0.2s;
         }
@@ -49,6 +62,10 @@
 
         .logo-icon {
             font-size: 24px;
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 6px;
         }
 
         .nav-links {
@@ -59,7 +76,7 @@
 
         .nav-links a {
             text-decoration: none;
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
             font-weight: 500;
             transition: all 0.2s;
@@ -67,7 +84,7 @@
         }
 
         .nav-links a:hover {
-            color: #0066cc;
+            color: var(--primary-color);
         }
 
         .nav-links a::after {
@@ -77,7 +94,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: #0066cc;
+            background: var(--primary-color);
             transition: width 0.2s;
         }
 
@@ -86,7 +103,7 @@
         }
 
         .get-app-btn {
-            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
             padding: 10px 24px;
             border-radius: 8px;
@@ -108,7 +125,7 @@
         .hero {
             padding: 120px 80px;
             text-align: center;
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            background: white;
             position: relative;
             overflow: hidden;
         }
@@ -120,7 +137,7 @@
             right: -10%;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(0, 102, 204, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 102, 204, 0.08) 0%, transparent 70%);
             border-radius: 50%;
             animation: float 6s ease-in-out infinite;
         }
@@ -132,7 +149,7 @@
             left: -5%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(52, 199, 89, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 102, 204, 0.05) 0%, transparent 70%);
             border-radius: 50%;
             animation: float 8s ease-in-out infinite reverse;
         }
@@ -152,7 +169,7 @@
             font-weight: 800;
             line-height: 1.2;
             margin-bottom: 24px;
-            color: #1a1a1a;
+            color: var(--text-primary);
             animation: slideInDown 0.8s ease-out;
         }
 
@@ -169,7 +186,7 @@
 
         .hero p {
             font-size: 18px;
-            color: #666;
+            color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto 40px;
             line-height: 1.6;
@@ -217,6 +234,10 @@
 
         .badge-icon {
             font-size: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 4px;
         }
 
         .badge-text {
@@ -227,13 +248,13 @@
 
         .badge-label {
             font-size: 11px;
-            color: #999;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .badge-value {
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         /* CTA Buttons */
@@ -246,7 +267,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
             padding: 16px 48px;
             border: none;
@@ -269,9 +290,9 @@
 
         .btn-secondary {
             background: white;
-            color: #0066cc;
+            color: var(--primary-color);
             padding: 16px 48px;
-            border: 2px solid #0066cc;
+            border: 2px solid var(--primary-color);
             border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
@@ -280,7 +301,7 @@
         }
 
         .btn-secondary:hover {
-            background: #f0f6ff;
+            background: var(--primary-light);
             transform: translateY(-2px);
         }
 
@@ -299,12 +320,12 @@
             font-size: 48px;
             font-weight: 800;
             margin-bottom: 16px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .features-header p {
             font-size: 18px;
-            color: #666;
+            color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
         }
@@ -317,7 +338,7 @@
 
         .feature-card {
             padding: 40px;
-            background: #f8f9fa;
+            background: var(--bg-light);
             border-radius: 16px;
             transition: all 0.3s;
             cursor: pointer;
@@ -332,7 +353,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #0066cc 0%, #34c759 100%);
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--success) 100%);
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.3s;
@@ -352,25 +373,28 @@
             font-size: 40px;
             margin-bottom: 16px;
             display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
         }
 
         .feature-card h3 {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 12px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .feature-card p {
             font-size: 14px;
-            color: #666;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
 
         /* Interactive Demo Section */
         .demo-section {
             padding: 120px 80px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
         }
 
         .demo-header {
@@ -382,12 +406,12 @@
             font-size: 48px;
             font-weight: 800;
             margin-bottom: 16px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .demo-header p {
             font-size: 18px;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .demo-container {
@@ -408,7 +432,7 @@
             font-size: 24px;
             font-weight: 700;
             margin-bottom: 24px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .form-group {
@@ -420,14 +444,14 @@
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .form-group input,
         .form-group select {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
             font-size: 16px;
             font-family: inherit;
@@ -437,7 +461,7 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #0066cc;
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
         }
 
@@ -450,7 +474,7 @@
         .search-submit {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -491,15 +515,15 @@
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 16px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .flight-preview {
-            background: #f8f9fa;
+            background: var(--bg-light);
             padding: 16px;
             border-radius: 12px;
             margin-bottom: 12px;
-            border-left: 4px solid #0066cc;
+            border-left: 4px solid var(--primary-color);
             transition: all 0.2s;
             cursor: pointer;
         }
@@ -511,28 +535,28 @@
         }
 
         .flight-preview.low-risk {
-            border-left-color: #34c759;
+            border-left-color: var(--success);
         }
 
         .flight-preview.medium-risk {
-            border-left-color: #ff9500;
+            border-left-color: var(--warning);
         }
 
         .flight-preview.high-risk {
-            border-left-color: #ff3b30;
+            border-left-color: var(--danger);
         }
 
         .alternatives-section {
             margin-top: 40px;
             padding-top: 40px;
-            border-top: 2px solid #e0e0e0;
+            border-top: 2px solid var(--border-color);
         }
 
         .alternatives-title {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 20px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .alternative-card {
@@ -541,7 +565,7 @@
             padding: 16px;
             margin-bottom: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid #34c759;
+            border-left: 4px solid var(--success);
             transition: all 0.2s;
         }
 
@@ -552,7 +576,7 @@
 
         .alternative-reason {
             font-size: 13px;
-            color: #0066cc;
+            color: var(--primary-color);
             font-weight: 600;
             margin-bottom: 8px;
             display: flex;
@@ -572,22 +596,22 @@
         }
 
         .recommendation-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
             border-radius: 12px;
             padding: 16px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--border-color);
             transition: all 0.2s;
         }
 
         .recommendation-card:hover {
-            border-color: #0066cc;
+            border-color: var(--primary-color);
             box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
         }
 
         .recommendation-label {
             font-size: 12px;
             font-weight: 600;
-            color: #0066cc;
+            color: var(--primary-color);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
@@ -595,7 +619,7 @@
 
         .recommendation-reason {
             font-size: 13px;
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 12px;
         }
 
@@ -606,7 +630,7 @@
             padding: 20px;
             margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid #0066cc;
+            border-left: 4px solid var(--primary-color);
             transition: all 0.2s;
             cursor: pointer;
         }
@@ -640,12 +664,12 @@
 
         .rank-badge.rank-1 {
             background: #ffd700;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .rank-badge.rank-2 {
             background: #c0c0c0;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .rank-badge.rank-3 {
@@ -654,8 +678,8 @@
         }
 
         .rank-badge.rank-other {
-            background: #e0e0e0;
-            color: #1a1a1a;
+            background: var(--border-color);
+            color: var(--text-primary);
         }
 
         .itinerary-header {
@@ -678,12 +702,12 @@
         .score-value {
             font-size: 20px;
             font-weight: 700;
-            color: #0066cc;
+            color: var(--primary-color);
         }
 
         .score-label {
             font-size: 11px;
-            color: #999;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -696,7 +720,7 @@
         }
 
         .flight-segment {
-            background: #f8f9fa;
+            background: var(--bg-light);
             padding: 8px 12px;
             border-radius: 6px;
             font-size: 12px;
@@ -704,7 +728,7 @@
         }
 
         .flight-segment-arrow {
-            color: #0066cc;
+            color: var(--primary-color);
             margin: 0 4px;
         }
 
@@ -713,7 +737,7 @@
             display: flex;
             gap: 0;
             margin-bottom: 24px;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .search-tab {
@@ -722,7 +746,7 @@
             border: none;
             font-size: 14px;
             font-weight: 600;
-            color: #666;
+            color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.2s;
             border-bottom: 3px solid transparent;
@@ -730,12 +754,12 @@
         }
 
         .search-tab:hover {
-            color: #0066cc;
+            color: var(--primary-color);
         }
 
         .search-tab.active {
-            color: #0066cc;
-            border-bottom-color: #0066cc;
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
         }
 
         .search-tab-content {
@@ -748,7 +772,7 @@
 
         /* Filters and Sorting */
         .filter-panel {
-            background: #f8f9fa;
+            background: var(--bg-light);
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
@@ -770,7 +794,7 @@
         .filter-item label {
             font-size: 12px;
             font-weight: 600;
-            color: #666;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -778,7 +802,7 @@
         .filter-item select,
         .filter-item input {
             padding: 10px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 14px;
         }
@@ -799,22 +823,22 @@
         }
 
         .filter-apply {
-            background: #0066cc;
+            background: var(--primary-color);
             color: white;
         }
 
         .filter-apply:hover {
-            background: #0052a3;
+            background: var(--primary-dark);
         }
 
         .filter-reset {
             background: white;
-            color: #0066cc;
-            border: 1px solid #0066cc;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
         }
 
         .filter-reset:hover {
-            background: #f0f6ff;
+            background: var(--primary-light);
         }
 
         /* Itinerary Detail Modal */
@@ -852,19 +876,19 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .modal-close {
             font-size: 28px;
             font-weight: bold;
-            color: #999;
+            color: var(--text-secondary);
             cursor: pointer;
             transition: color 0.2s;
         }
 
         .modal-close:hover {
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .modal-actions {
@@ -872,7 +896,7 @@
             gap: 12px;
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
+            border-top: 2px solid var(--border-color);
         }
 
         .modal-actions button {
@@ -887,16 +911,16 @@
         }
 
         .export-btn {
-            background: #0066cc;
+            background: var(--primary-color);
             color: white;
         }
 
         .export-btn:hover {
-            background: #0052a3;
+            background: var(--primary-dark);
         }
 
         .email-btn {
-            background: #34c759;
+            background: var(--success);
             color: white;
         }
 
@@ -905,8 +929,8 @@
         }
 
         .close-btn {
-            background: #e0e0e0;
-            color: #1a1a1a;
+            background: var(--border-color);
+            color: var(--text-primary);
         }
 
         .close-btn:hover {
@@ -921,7 +945,7 @@
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 12px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .detail-table {
@@ -930,28 +954,28 @@
         }
 
         .detail-table th {
-            background: #f8f9fa;
+            background: var(--bg-light);
             padding: 12px;
             text-align: left;
             font-size: 12px;
             font-weight: 600;
-            color: #666;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .detail-table td {
             padding: 12px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .detail-table tr:hover {
-            background: #f8f9fa;
+            background: var(--bg-light);
         }
 
         .email-form {
-            background: #f8f9fa;
+            background: var(--bg-light);
             padding: 16px;
             border-radius: 8px;
             margin-bottom: 16px;
@@ -960,7 +984,7 @@
         .email-form input {
             width: 100%;
             padding: 10px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 14px;
             margin-bottom: 12px;
@@ -969,7 +993,7 @@
         .email-form button {
             width: 100%;
             padding: 10px;
-            background: #34c759;
+            background: var(--success);
             color: white;
             border: none;
             border-radius: 6px;
@@ -992,7 +1016,7 @@
 
         .flight-preview-airline {
             font-weight: 600;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .risk-badge {
@@ -1004,28 +1028,28 @@
 
         .risk-badge.low {
             background: rgba(52, 199, 89, 0.15);
-            color: #34c759;
+            color: var(--success);
         }
 
         .risk-badge.medium {
             background: rgba(255, 149, 0, 0.15);
-            color: #ff9500;
+            color: var(--warning);
         }
 
         .risk-badge.high {
             background: rgba(255, 59, 48, 0.15);
-            color: #ff3b30;
+            color: var(--danger);
         }
 
         .flight-preview-route {
             font-size: 13px;
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 6px;
         }
 
         .flight-preview-time {
             font-size: 13px;
-            color: #0066cc;
+            color: var(--primary-color);
             font-weight: 600;
         }
 
@@ -1041,7 +1065,7 @@
         .stat {
             text-align: center;
             padding: 40px;
-            background: #f8f9fa;
+            background: var(--bg-light);
             border-radius: 16px;
             transition: all 0.3s;
             cursor: pointer;
@@ -1056,19 +1080,19 @@
         .stat-number {
             font-size: 56px;
             font-weight: 800;
-            color: #0066cc;
+            color: var(--primary-color);
             margin-bottom: 8px;
         }
 
         .stat-label {
             font-size: 16px;
-            color: #666;
+            color: var(--text-secondary);
             font-weight: 500;
         }
 
         /* Footer */
         footer {
-            background: #1a1a1a;
+            background: var(--text-primary);
             color: white;
             padding: 60px 80px;
             text-align: center;
@@ -1076,20 +1100,20 @@
 
         footer p {
             font-size: 14px;
-            color: #999;
+            color: var(--text-secondary);
         }
 
         .loading {
             text-align: center;
             padding: 20px;
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
         }
 
         .error-message {
             background: rgba(255, 59, 48, 0.1);
-            border: 1px solid #ff3b30;
-            color: #ff3b30;
+            border: 1px solid var(--danger);
+            color: var(--danger);
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 16px;
@@ -1142,7 +1166,7 @@
     <!-- Navigation -->
     <nav>
         <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-            <span class="logo-icon">✈️</span>
+            <span class="logo-icon"></span>
             <span>SmartFlight</span>
         </div>
         <ul class="nav-links">
@@ -1161,14 +1185,14 @@
 
             <div class="badges">
                 <div class="badge">
-                    <span class="badge-icon">🏆</span>
+                    <span class="badge-icon"></span>
                     <div class="badge-text">
                         <span class="badge-label">Award Winner</span>
                         <span class="badge-value">2024</span>
                     </div>
                 </div>
                 <div class="badge">
-                    <span class="badge-icon">⭐</span>
+                    <span class="badge-icon"></span>
                     <div class="badge-text">
                         <span class="badge-label">Top Rated</span>
                         <span class="badge-value">4.9/5</span>
@@ -1192,32 +1216,32 @@
 
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">📊</div>
+                <div class="feature-icon" style="background: var(--primary-color);"></div>
                 <h3>Disruption Predictions</h3>
                 <p>AI-powered analysis predicts delays and disruptions before they happen with 98% accuracy</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">⚡</div>
+                <div class="feature-icon" style="background: var(--primary-color);"></div>
                 <h3>Real-time Updates</h3>
                 <p>Instant notifications for any changes to your flight status, gate changes, and delays</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🎯</div>
+                <div class="feature-icon" style="background: var(--primary-color);"></div>
                 <h3>Connection Safety</h3>
                 <p>Analyze connection times and get recommendations for safe layovers and transfers</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🔍</div>
+                <div class="feature-icon" style="background: var(--primary-color);"></div>
                 <h3>Detailed Analytics</h3>
                 <p>Comprehensive flight data including reliability scores and historical performance</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🌍</div>
+                <div class="feature-icon" style="background: var(--primary-color);"></div>
                 <h3>Global Coverage</h3>
                 <p>Track flights across 500K+ routes worldwide with real-time data integration</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">📱</div>
+                <div class="feature-icon" style="background: var(--primary-color);"></div>
                 <h3>Web & Mobile</h3>
                 <p>Seamless experience across all devices with synchronized data and notifications</p>
             </div>
@@ -1267,7 +1291,7 @@
                     <form id="multiLegForm">
                         <div id="legsContainer">
                             <div class="leg-form" data-leg="0">
-                                <div style="margin-bottom: 12px; font-weight: 600; color: #0066cc;">Leg 1</div>
+                                <div style="margin-bottom: 12px; font-weight: 600; color: var(--primary-color);">Leg 1</div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>From</label>
@@ -1308,7 +1332,7 @@
 
         <!-- Filter Panel (F010) -->
         <div class="filter-panel">
-            <div style="margin-bottom: 16px; font-weight: 600; color: #1a1a1a;">Filter & Sort Results</div>
+            <div style="margin-bottom: 16px; font-weight: 600; color: var(--text-primary);">Filter & Sort Results</div>
             <div class="filter-group">
                 <div class="filter-item">
                     <label>Risk Level</label>
@@ -1370,9 +1394,9 @@
             </div>
             <div id="modalBody"></div>
             <div class="modal-actions">
-                <button class="export-btn" onclick="exportItinerary('json')">📥 Export JSON</button>
-                <button class="export-btn" onclick="exportItinerary('csv')">📥 Export CSV</button>
-                <button class="email-btn" onclick="showEmailForm()">📧 Send Email</button>
+                <button class="export-btn" onclick="exportItinerary('json')">Export JSON</button>
+                <button class="export-btn" onclick="exportItinerary('csv')">Export CSV</button>
+                <button class="email-btn" onclick="showEmailForm()">Send Email</button>
                 <button class="close-btn" onclick="closeItineraryModal()">Close</button>
             </div>
             <div id="emailFormContainer" style="display: none; margin-top: 20px;">
@@ -1478,7 +1502,7 @@
             legForm.className = 'leg-form';
             legForm.setAttribute('data-leg', legCount - 1);
             legForm.innerHTML = `
-                <div style="margin-bottom: 12px; font-weight: 600; color: #0066cc;">Leg ${legCount}</div>
+                <div style="margin-bottom: 12px; font-weight: 600; color: var(--primary-color);">Leg ${legCount}</div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>From</label>
@@ -1592,7 +1616,7 @@
             resultsContainer.innerHTML = '';
 
             if (!flights || flights.length === 0) {
-                resultsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No flights found</p>';
+                resultsContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">No flights found</p>';
                 return;
             }
 
@@ -1705,13 +1729,13 @@
             
             const title = document.createElement('h3');
             title.style.marginBottom = '16px';
-            title.style.color = '#1a1a1a';
+            title.style.color = 'var(--text-primary)';
             title.textContent = 'Safer Alternatives';
             container.appendChild(title);
 
             if (!alternatives || alternatives.length === 0) {
                 const noData = document.createElement('p');
-                noData.style.color = '#666';
+                noData.style.color = 'var(--text-secondary)';
                 noData.textContent = 'No safer alternatives available for this route.';
                 container.appendChild(noData);
                 return;
@@ -1721,13 +1745,13 @@
                 const riskLevel = alt.risk_level.toLowerCase();
                 const depTime = alt.scheduled_departure ? alt.scheduled_departure.substring(11, 16) : 'N/A';
                 const arrTime = alt.scheduled_arrival ? alt.scheduled_arrival.substring(11, 16) : 'N/A';
-                const reasonIcon = alt.type === 'direct' ? '✈️' : alt.type === 'different_airline' ? '🔄' : '⏰';
+                const reasonIcon = alt.type === 'direct' ? 'Direct' : alt.type === 'different_airline' ? 'Airline' : 'Time';
 
                 const card = document.createElement('div');
                 card.className = 'alternative-card';
                 card.innerHTML = `
                     <div class="alternative-reason">
-                        <span class="reason-icon">${reasonIcon}</span>
+                        <span class="reason-icon" style="background: var(--primary-color); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">${reasonIcon}</span>
                         <span>${alt.reason}</span>
                     </div>
                     <div class="flight-preview-header">
@@ -1736,7 +1760,7 @@
                     </div>
                     <div class="flight-preview-route">${alt.origin} → ${alt.destination}</div>
                     <div class="flight-preview-time">${depTime} - ${arrTime}</div>
-                    <div style="margin-top: 8px; font-size: 13px; color: #666;">
+                    <div style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">
                         Reliability: <strong>${alt.reliability_score}%</strong> • Risk: <strong>${Math.round(alt.disruption_probability * 100)}%</strong>
                     </div>
                 `;
@@ -1750,14 +1774,14 @@
             
             const title = document.createElement('h3');
             title.style.marginBottom = '16px';
-            title.style.color = '#1a1a1a';
+            title.style.color = 'var(--text-primary)';
             title.textContent = 'Top Recommendations';
             container.appendChild(title);
 
             const recTypes = [
-                { key: 'most_reliable', label: '⭐ Most Reliable', icon: '🎯' },
-                { key: 'fastest', label: '⚡ Fastest', icon: '🚀' },
-                { key: 'best_balance', label: '⚖️ Best Balance', icon: '✨' }
+                { key: 'most_reliable', label: 'Most Reliable' },
+                { key: 'fastest', label: 'Fastest' },
+                { key: 'best_balance', label: 'Best Balance' }
             ];
 
             recTypes.forEach(rec => {
@@ -1773,12 +1797,12 @@
                         <div class="recommendation-label">${rec.label}</div>
                         <div class="recommendation-reason">${data.reason}</div>
                         <div style="font-weight: 600; margin-bottom: 8px;">${data.flight_number}</div>
-                        <div style="font-size: 13px; color: #666; margin-bottom: 8px;">
+                        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">
                             ${depTime} - ${arrTime}
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <span class="risk-badge ${riskLevel}">${data.risk_level}</span>
-                            <span style="font-size: 12px; color: #666;">Reliability: ${data.reliability_score}%</span>
+                            <span style="font-size: 12px; color: var(--text-secondary);">Reliability: ${data.reliability_score}%</span>
                         </div>
                     `;
                     container.appendChild(card);
@@ -1792,7 +1816,7 @@
             container.innerHTML = '';
 
             if (!itineraries || itineraries.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666;">No itineraries found.</p>';
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No itineraries found.</p>';
                 return;
             }
 
@@ -1820,7 +1844,7 @@
                     <div class="itinerary-header">
                         <div>
                             <div style="font-weight: 600; margin-bottom: 4px;">${flightSegments}</div>
-                            <div style="font-size: 13px; color: #666;">${itinerary.num_stops || 0} stop${(itinerary.num_stops || 0) !== 1 ? 's' : ''}</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">${itinerary.num_stops || 0} stop${(itinerary.num_stops || 0) !== 1 ? 's' : ''}</div>
                         </div>
                         <div class="itinerary-score">
                             <div class="score-item">
@@ -1849,12 +1873,12 @@
                         `).join('')}
                     </div>
                     
-                    <div style="display: flex; gap: 12px; font-size: 13px; color: #666;">
+                    <div style="display: flex; gap: 12px; font-size: 13px; color: var(--text-secondary);">
                         <span>Risk: <strong>${itinerary.overall_risk_level}</strong></span>
                         <span>Disruption: <strong>${Math.round((itinerary.overall_disruption_probability || 0) * 100)}%</strong></span>
                     </div>
                     
-                    <div style="margin-top: 12px; font-size: 12px; color: #0066cc; font-weight: 600;">
+                    <div style="margin-top: 12px; font-size: 12px; color: var(--primary-color); font-weight: 600;">
                         Click to view details →
                     </div>
                 `;
@@ -1927,20 +1951,20 @@
                     <h3>Summary</h3>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
                         <div>
-                            <div style="font-size: 12px; color: #666; text-transform: uppercase;">Overall Risk</div>
-                            <div style="font-size: 18px; font-weight: 700; color: #0066cc;">${itinerary.overall_risk_level}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Overall Risk</div>
+                            <div style="font-size: 18px; font-weight: 700; color: var(--primary-color);">${itinerary.overall_risk_level}</div>
                         </div>
                         <div>
-                            <div style="font-size: 12px; color: #666; text-transform: uppercase;">Reliability</div>
-                            <div style="font-size: 18px; font-weight: 700; color: #0066cc;">${itinerary.overall_reliability_score}%</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Reliability</div>
+                            <div style="font-size: 18px; font-weight: 700; color: var(--primary-color);">${itinerary.overall_reliability_score}%</div>
                         </div>
                         <div>
-                            <div style="font-size: 12px; color: #666; text-transform: uppercase;">Duration</div>
-                            <div style="font-size: 18px; font-weight: 700; color: #0066cc;">${Math.floor((itinerary.journey_duration_minutes || 0) / 60)}h ${(itinerary.journey_duration_minutes || 0) % 60}m</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Duration</div>
+                            <div style="font-size: 18px; font-weight: 700; color: var(--primary-color);">${Math.floor((itinerary.journey_duration_minutes || 0) / 60)}h ${(itinerary.journey_duration_minutes || 0) % 60}m</div>
                         </div>
                         <div>
-                            <div style="font-size: 12px; color: #666; text-transform: uppercase;">Stops</div>
-                            <div style="font-size: 18px; font-weight: 700; color: #0066cc;">${itinerary.num_stops || 0}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Stops</div>
+                            <div style="font-size: 18px; font-weight: 700; color: var(--primary-color);">${itinerary.num_stops || 0}</div>
                         </div>
                     </div>
                 </div>
@@ -2100,3 +2124,4 @@
             document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
+
