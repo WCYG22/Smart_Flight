@@ -6,16 +6,16 @@
     <title>SmartFlight - Flight Disruption Risk Assistant</title>
     <style>
         :root {
-            --primary-color: var(--primary-color);
-            --primary-dark: var(--primary-dark);
-            --primary-light: var(--primary-light);
-            --text-primary: var(--text-primary);
-            --text-secondary: var(--text-secondary);
-            --border-color: var(--border-color);
-            --bg-light: var(--bg-light);
-            --success: var(--success);
-            --warning: var(--warning);
-            --danger: var(--danger);
+            --primary-color: #0066cc;
+            --primary-dark: #0052a3;
+            --primary-light: #f0f6ff;
+            --text-primary: #0066cc;
+            --text-secondary: #0066cc;
+            --border-color: #e0e0e0;
+            --bg-light: #ffffff;
+            --success: #34c759;
+            --warning: #ff9500;
+            --danger: #ff3b30;
         }
 
         * {
@@ -125,7 +125,7 @@
         .hero {
             padding: 120px 80px;
             text-align: center;
-            background: white;
+            background: #ffffff;
             position: relative;
             overflow: hidden;
         }
@@ -137,7 +137,7 @@
             right: -10%;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(0, 102, 204, 0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 102, 204, 0.05) 0%, transparent 70%);
             border-radius: 50%;
             animation: float 6s ease-in-out infinite;
         }
@@ -149,7 +149,7 @@
             left: -5%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(0, 102, 204, 0.05) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 102, 204, 0.03) 0%, transparent 70%);
             border-radius: 50%;
             animation: float 8s ease-in-out infinite reverse;
         }
@@ -308,7 +308,7 @@
         /* Features Section */
         .features {
             padding: 120px 80px;
-            background: white;
+            background: #ffffff;
         }
 
         .features-header {
@@ -338,12 +338,13 @@
 
         .feature-card {
             padding: 40px;
-            background: var(--bg-light);
+            background: #ffffff;
             border-radius: 16px;
             transition: all 0.3s;
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--border-color);
         }
 
         .feature-card::before {
@@ -394,7 +395,7 @@
         /* Interactive Demo Section */
         .demo-section {
             padding: 120px 80px;
-            background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
+            background: #ffffff;
         }
 
         .demo-header {
@@ -422,10 +423,11 @@
         }
 
         .search-card {
-            background: white;
+            background: #ffffff;
             border-radius: 16px;
             padding: 40px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
         }
 
         .search-card h3 {
@@ -519,13 +521,14 @@
         }
 
         .flight-preview {
-            background: var(--bg-light);
+            background: #ffffff;
             padding: 16px;
             border-radius: 12px;
             margin-bottom: 12px;
             border-left: 4px solid var(--primary-color);
             transition: all 0.2s;
             cursor: pointer;
+            border: 1px solid var(--border-color);
         }
 
         .flight-preview:hover {
@@ -567,6 +570,7 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             border-left: 4px solid var(--success);
             transition: all 0.2s;
+            border: 1px solid var(--border-color);
         }
 
         .alternative-card:hover {
@@ -596,7 +600,7 @@
         }
 
         .recommendation-card {
-            background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
+            background: #ffffff;
             border-radius: 12px;
             padding: 16px;
             border: 2px solid var(--border-color);
@@ -633,6 +637,7 @@
             border-left: 4px solid var(--primary-color);
             transition: all 0.2s;
             cursor: pointer;
+            border: 1px solid var(--border-color);
         }
 
         .ranked-itinerary-card:hover {
@@ -772,10 +777,11 @@
 
         /* Filters and Sorting */
         .filter-panel {
-            background: var(--bg-light);
+            background: #ffffff;
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
+            border: 1px solid var(--border-color);
         }
 
         .filter-group {
@@ -859,7 +865,7 @@
         }
 
         .modal-content {
-            background-color: white;
+            background-color: #ffffff;
             margin: 5% auto;
             padding: 30px;
             border-radius: 12px;
@@ -868,6 +874,7 @@
             max-height: 80vh;
             overflow-y: auto;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
         }
 
         .modal-header {
@@ -954,12 +961,12 @@
         }
 
         .detail-table th {
-            background: var(--bg-light);
+            background: #ffffff;
             padding: 12px;
             text-align: left;
             font-size: 12px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: var(--text-primary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-bottom: 2px solid var(--border-color);
@@ -971,14 +978,15 @@
         }
 
         .detail-table tr:hover {
-            background: var(--bg-light);
+            background: #ffffff;
         }
 
         .email-form {
-            background: var(--bg-light);
+            background: #ffffff;
             padding: 16px;
             border-radius: 8px;
             margin-bottom: 16px;
+            border: 1px solid var(--border-color);
         }
 
         .email-form input {
@@ -1059,22 +1067,23 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 40px;
             padding: 80px;
-            background: white;
+            background: #ffffff;
         }
 
         .stat {
             text-align: center;
             padding: 40px;
-            background: var(--bg-light);
+            background: #ffffff;
             border-radius: 16px;
             transition: all 0.3s;
             cursor: pointer;
+            border: 1px solid var(--border-color);
         }
 
         .stat:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-            background: white;
+            background: #ffffff;
         }
 
         .stat-number {
