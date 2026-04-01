@@ -7,6 +7,8 @@ from .risk_calculator import compute_risk
 from .connection_analyzer import analyze_connection, calculate_itinerary_risk
 from .alternative_routes import find_alternative_routes, get_route_recommendations
 from .ranking_engine import rank_itineraries
+from .itinerary_manager import generate_itinerary_summary, export_itinerary_json, export_itinerary_csv, export_itinerary_html
+from .email_service import send_itinerary_email
 
 app = FastAPI(title="SmartFlight – Phase 2 Multi-Leg")
 
@@ -284,3 +286,138 @@ def get_recommendations(req: SearchRequest):
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Error: {e}")
 
+
+
+@app.post("/itinerary-summary")
+def get_itinerary_summary(itinerary_data: Dict):
+    """
+    Get detailed summary for an itinerary (F011).
+    """
+    try:
+        summary = generate_itinerary_summary(itinerary_data)
+        return summary
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error: {e}")
+
+
+@app.post("/export-itinerary")
+def export_itinerary(request: Dict):
+    """
+    Export itinerary in requested format (F012).
+    Formats: json, csv, html
+    """
+    try:
+        itinerary = request.get("itinerary")
+        format_type = request.get("format", "json").lower()
+        
+        if format_type == "json":
+            content = export_itinerary_json(itinerary)
+            return {
+                "success": True,
+                "format": "json",
+                "content": content,
+                "filename": "itinerary.json"
+            }
+        elif format_type == "csv":
+            content = export_itinerary_csv(itinerary)
+            return {
+                "success": True,
+                "format": "csv",
+                "content": content,
+                "filename": "itinerary.csv"
+            }
+        elif format_type == "html":
+            content = export_itinerary_html(itinerary)
+            return {
+                "success": True,
+                "format": "html",
+                "content": content,
+                "filename": "itinerary.html"
+            }
+        else:
+            raise HTTPException(status_code=400, detail="Invalid format. Use: json, csv, or html")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error: {e}")
+
+
+@app.post("/send-itinerary-email")
+def send_itinerary_via_email(request: Dict):
+    """
+    Send itinerary summary via email (F013).
+    """
+    try:
+        email = request.get("email")
+        itinerary = request.get("itinerary")
+        subject = request.get("subject", "Your SmartFlight Itinerary")
+        
+        if not email:
+            raise HTTPException(status_code=400, detail="Email address required")
+        
+        result = send_itinerary_email(email, itinerary, subject)
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error: {e}")
+
+
+@app.post("/filter-itineraries")
+def filter_itineraries(request: Dict):
+    """
+    Filter and sort itineraries (F010).
+    Supports filtering by: risk_level, min_reliability, max_duration, departure_time
+    Supports sorting by: reliability, duration, risk, rank
+    """
+    try:
+        itineraries = request.get("itineraries", [])
+        filters = request.get("filters", {})
+        sort_by = request.get("sort_by", "rank")
+        sort_order = request.get("sort_order", "asc")  # asc or desc
+        
+        # Apply filters
+        filtered = itineraries
+        
+        # Filter by risk level
+        if "risk_level" in filters:
+            risk_level = filters["risk_level"].lower()
+            filtered = [it for it in filtered if it.get("overall_risk_level", "").lower() == risk_level]
+        
+        # Filter by minimum reliability
+        if "min_reliability" in filters:
+            min_rel = filters["min_reliability"]
+            filtered = [it for it in filtered if it.get("overall_reliability_score", 0) >= min_rel]
+        
+        # Filter by maximum duration
+        if "max_duration_minutes" in filters:
+            max_dur = filters["max_duration_minutes"]
+            filtered = [it for it in filtered if it.get("journey_duration_minutes", 0) <= max_dur]
+        
+        # Filter by number of stops
+        if "max_stops" in filters:
+            max_stops = filters["max_stops"]
+            filtered = [it for it in filtered if it.get("num_stops", 0) <= max_stops]
+        
+        # Apply sorting
+        sort_key_map = {
+            "rank": lambda x: x.get("rank", 999),
+            "reliability": lambda x: x.get("overall_reliability_score", 0),
+            "duration": lambda x: x.get("journey_duration_minutes", 0),
+            "risk": lambda x: {"low": 0, "medium": 1, "high": 2}.get(x.get("overall_risk_level", "high").lower(), 2),
+            "disruption": lambda x: x.get("overall_disruption_probability", 1)
+        }
+        
+        sort_key = sort_key_map.get(sort_by, sort_key_map["rank"])
+        reverse = sort_order.lower() == "desc"
+        
+        filtered.sort(key=sort_key, reverse=reverse)
+        
+        return {
+            "success": True,
+            "total_before": len(itineraries),
+            "total_after": len(filtered),
+            "itineraries": filtered
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error: {e}")

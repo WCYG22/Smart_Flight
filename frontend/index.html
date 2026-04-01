@@ -746,6 +746,243 @@
             display: block;
         }
 
+        /* Filters and Sorting */
+        .filter-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-item label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-item select,
+        .filter-item input {
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-apply {
+            background: #0066cc;
+            color: white;
+        }
+
+        .filter-apply:hover {
+            background: #0052a3;
+        }
+
+        .filter-reset {
+            background: white;
+            color: #0066cc;
+            border: 1px solid #0066cc;
+        }
+
+        .filter-reset:hover {
+            background: #f0f6ff;
+        }
+
+        /* Itinerary Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .modal-close {
+            font-size: 28px;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #1a1a1a;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .export-btn {
+            background: #0066cc;
+            color: white;
+        }
+
+        .export-btn:hover {
+            background: #0052a3;
+        }
+
+        .email-btn {
+            background: #34c759;
+            color: white;
+        }
+
+        .email-btn:hover {
+            background: #2fa84f;
+        }
+
+        .close-btn {
+            background: #e0e0e0;
+            color: #1a1a1a;
+        }
+
+        .close-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .detail-section {
+            margin-bottom: 24px;
+        }
+
+        .detail-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .detail-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .detail-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .email-form {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .email-form input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .email-form button {
+            width: 100%;
+            padding: 10px;
+            background: #34c759;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .email-form button:hover {
+            background: #2fa84f;
+        }
+
         .flight-preview-header {
             display: flex;
             justify-content: space-between;
@@ -1061,6 +1298,91 @@
             </div>
         </div>
     </section>
+
+    <!-- Ranked Results Section (F008) -->
+    <section class="demo-section" id="rankedResultsSection" style="display: none;">
+        <div class="demo-header">
+            <h2>Best Itineraries for Your Trip</h2>
+            <p>Ranked by reliability, journey time, and number of stops</p>
+        </div>
+
+        <!-- Filter Panel (F010) -->
+        <div class="filter-panel">
+            <div style="margin-bottom: 16px; font-weight: 600; color: #1a1a1a;">Filter & Sort Results</div>
+            <div class="filter-group">
+                <div class="filter-item">
+                    <label>Risk Level</label>
+                    <select id="filterRisk" onchange="applyFilters()">
+                        <option value="">All Levels</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Min Reliability (%)</label>
+                    <input type="number" id="filterReliability" min="0" max="100" placeholder="e.g., 70" onchange="applyFilters()">
+                </div>
+                <div class="filter-item">
+                    <label>Max Duration (hours)</label>
+                    <input type="number" id="filterDuration" min="0" placeholder="e.g., 12" onchange="applyFilters()">
+                </div>
+                <div class="filter-item">
+                    <label>Max Stops</label>
+                    <select id="filterStops" onchange="applyFilters()">
+                        <option value="">Any</option>
+                        <option value="0">Direct</option>
+                        <option value="1">1 Stop</option>
+                        <option value="2">2 Stops</option>
+                        <option value="3">3 Stops</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-group">
+                <div class="filter-item">
+                    <label>Sort By</label>
+                    <select id="sortBy" onchange="applyFilters()">
+                        <option value="rank">Rank (Best First)</option>
+                        <option value="reliability">Reliability (Highest)</option>
+                        <option value="duration">Duration (Shortest)</option>
+                        <option value="risk">Risk (Lowest)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-apply" onclick="applyFilters()">Apply Filters</button>
+                <button class="filter-reset" onclick="resetFilters()">Reset</button>
+            </div>
+        </div>
+
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div id="rankedResultsContainer"></div>
+            <button class="btn-primary" onclick="backToSearch()" style="margin-top: 20px;">← Back to Search</button>
+        </div>
+    </section>
+
+    <!-- Itinerary Detail Modal (F011) -->
+    <div id="itineraryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Itinerary Details</h2>
+                <span class="modal-close" onclick="closeItineraryModal()">&times;</span>
+            </div>
+            <div id="modalBody"></div>
+            <div class="modal-actions">
+                <button class="export-btn" onclick="exportItinerary('json')">📥 Export JSON</button>
+                <button class="export-btn" onclick="exportItinerary('csv')">📥 Export CSV</button>
+                <button class="email-btn" onclick="showEmailForm()">📧 Send Email</button>
+                <button class="close-btn" onclick="closeItineraryModal()">Close</button>
+            </div>
+            <div id="emailFormContainer" style="display: none; margin-top: 20px;">
+                <div class="email-form">
+                    <input type="email" id="emailInput" placeholder="Enter your email address" required>
+                    <button onclick="sendItineraryEmail()">Send Itinerary</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Ranked Results Section (F008) -->
     <section class="demo-section" id="rankedResultsSection" style="display: none;">
@@ -1474,12 +1796,18 @@
                 return;
             }
 
+            // Store for filtering
+            allItineraries = itineraries;
+            currentItineraries = itineraries;
+
             itineraries.forEach((itinerary, index) => {
                 const rankClass = `rank-${itinerary.rank || index + 1}`;
                 const rankBadgeClass = itinerary.rank ? `rank-${itinerary.rank}` : 'rank-other';
                 
                 const card = document.createElement('div');
                 card.className = `ranked-itinerary-card ${rankClass}`;
+                card.style.cursor = 'pointer';
+                card.onclick = () => showItineraryDetails(itinerary);
                 
                 const flights = itinerary.flights || [];
                 const flightSegments = flights.map(f => `${f.origin} → ${f.destination}`).join(' → ');
@@ -1525,10 +1853,245 @@
                         <span>Risk: <strong>${itinerary.overall_risk_level}</strong></span>
                         <span>Disruption: <strong>${Math.round((itinerary.overall_disruption_probability || 0) * 100)}%</strong></span>
                     </div>
+                    
+                    <div style="margin-top: 12px; font-size: 12px; color: #0066cc; font-weight: 600;">
+                        Click to view details →
+                    </div>
                 `;
                 
                 container.appendChild(card);
             });
+        }
+
+        // Store current itineraries for filtering
+        let allItineraries = [];
+        let currentItineraries = [];
+
+        // F010: Apply filters and sorting
+        async function applyFilters() {
+            const filters = {
+                risk_level: document.getElementById('filterRisk').value,
+                min_reliability: parseInt(document.getElementById('filterReliability').value) || 0,
+                max_duration_minutes: (parseInt(document.getElementById('filterDuration').value) || 24) * 60,
+                max_stops: parseInt(document.getElementById('filterStops').value) || 999
+            };
+            
+            const sortBy = document.getElementById('sortBy').value;
+            
+            try {
+                const response = await fetch(API_BASE + '/filter-itineraries', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        itineraries: allItineraries,
+                        filters: filters,
+                        sort_by: sortBy,
+                        sort_order: 'asc'
+                    })
+                });
+                
+                if (!response.ok) throw new Error('Filter failed');
+                
+                const result = await response.json();
+                currentItineraries = result.itineraries;
+                displayRankedResults(currentItineraries);
+            } catch (error) {
+                console.error('Filter error:', error);
+                alert('Failed to apply filters');
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('filterRisk').value = '';
+            document.getElementById('filterReliability').value = '';
+            document.getElementById('filterDuration').value = '';
+            document.getElementById('filterStops').value = '';
+            document.getElementById('sortBy').value = 'rank';
+            currentItineraries = allItineraries;
+            displayRankedResults(currentItineraries);
+        }
+
+        // F011: Show itinerary details in modal
+        function showItineraryDetails(itinerary) {
+            const modal = document.getElementById('itineraryModal');
+            const modalBody = document.getElementById('modalBody');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.textContent = `${itinerary.rank_label} - Itinerary Details`;
+            
+            const flights = itinerary.flights || [];
+            const connections = itinerary.connections || [];
+            
+            let html = `
+                <div class="detail-section">
+                    <h3>Summary</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+                        <div>
+                            <div style="font-size: 12px; color: #666; text-transform: uppercase;">Overall Risk</div>
+                            <div style="font-size: 18px; font-weight: 700; color: #0066cc;">${itinerary.overall_risk_level}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: #666; text-transform: uppercase;">Reliability</div>
+                            <div style="font-size: 18px; font-weight: 700; color: #0066cc;">${itinerary.overall_reliability_score}%</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: #666; text-transform: uppercase;">Duration</div>
+                            <div style="font-size: 18px; font-weight: 700; color: #0066cc;">${Math.floor((itinerary.journey_duration_minutes || 0) / 60)}h ${(itinerary.journey_duration_minutes || 0) % 60}m</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: #666; text-transform: uppercase;">Stops</div>
+                            <div style="font-size: 18px; font-weight: 700; color: #0066cc;">${itinerary.num_stops || 0}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>Flight Segments</h3>
+                    <table class="detail-table">
+                        <tr>
+                            <th>Leg</th>
+                            <th>Flight</th>
+                            <th>Route</th>
+                            <th>Departure</th>
+                            <th>Arrival</th>
+                            <th>Risk</th>
+                            <th>Reliability</th>
+                        </tr>
+            `;
+            
+            flights.forEach((flight, idx) => {
+                const depTime = flight.scheduled_departure ? flight.scheduled_departure.substring(11, 16) : 'N/A';
+                const arrTime = flight.scheduled_arrival ? flight.scheduled_arrival.substring(11, 16) : 'N/A';
+                html += `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td><strong>${flight.flight_number}</strong></td>
+                        <td>${flight.origin} → ${flight.destination}</td>
+                        <td>${depTime}</td>
+                        <td>${arrTime}</td>
+                        <td><span class="risk-badge ${flight.risk_level.toLowerCase()}">${flight.risk_level}</span></td>
+                        <td>${flight.reliability_score}%</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                    </table>
+                </div>
+            `;
+            
+            if (connections.length > 0) {
+                html += `
+                    <div class="detail-section">
+                        <h3>Connection Details</h3>
+                        <table class="detail-table">
+                            <tr>
+                                <th>Between Legs</th>
+                                <th>Connection Time</th>
+                                <th>Risk</th>
+                                <th>Safe</th>
+                            </tr>
+                `;
+                
+                connections.forEach((conn, idx) => {
+                    html += `
+                        <tr>
+                            <td>Leg ${idx + 1} → Leg ${idx + 2}</td>
+                            <td>${conn.connection_time_minutes} minutes</td>
+                            <td>${conn.connection_risk}</td>
+                            <td>${conn.is_safe ? '✓ Yes' : '✗ No'}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                        </table>
+                    </div>
+                `;
+            }
+            
+            modalBody.innerHTML = html;
+            modal.classList.add('active');
+            
+            // Store current itinerary for export/email
+            window.currentItinerary = itinerary;
+        }
+
+        function closeItineraryModal() {
+            document.getElementById('itineraryModal').classList.remove('active');
+            document.getElementById('emailFormContainer').style.display = 'none';
+        }
+
+        function showEmailForm() {
+            document.getElementById('emailFormContainer').style.display = 'block';
+            document.getElementById('emailInput').focus();
+        }
+
+        // F012: Export itinerary
+        async function exportItinerary(format) {
+            if (!window.currentItinerary) return;
+            
+            try {
+                const response = await fetch(API_BASE + '/export-itinerary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        itinerary: window.currentItinerary,
+                        format: format
+                    })
+                });
+                
+                if (!response.ok) throw new Error('Export failed');
+                
+                const result = await response.json();
+                
+                // Create download link
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result.content));
+                element.setAttribute('download', result.filename);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+                
+                alert(`Exported as ${format.toUpperCase()}`);
+            } catch (error) {
+                console.error('Export error:', error);
+                alert('Failed to export itinerary');
+            }
+        }
+
+        // F013: Send itinerary via email
+        async function sendItineraryEmail() {
+            if (!window.currentItinerary) return;
+            
+            const email = document.getElementById('emailInput').value.trim();
+            if (!email) {
+                alert('Please enter an email address');
+                return;
+            }
+            
+            try {
+                const response = await fetch(API_BASE + '/send-itinerary-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        itinerary: window.currentItinerary,
+                        subject: 'Your SmartFlight Itinerary'
+                    })
+                });
+                
+                if (!response.ok) throw new Error('Email send failed');
+                
+                const result = await response.json();
+                alert(result.message);
+                document.getElementById('emailInput').value = '';
+                document.getElementById('emailFormContainer').style.display = 'none';
+            } catch (error) {
+                console.error('Email error:', error);
+                alert('Failed to send email');
+            }
         }
 
         function backToSearch() {
