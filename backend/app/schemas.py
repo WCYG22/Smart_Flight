@@ -36,6 +36,11 @@ class ItinerarySchema(BaseModel):
     overall_risk_level: str
     overall_reliability_score: int
     overall_disruption_probability: float
+    rank: Optional[int] = None
+    rank_label: Optional[str] = None
+    ranking_score: Optional[float] = None
+    journey_duration_minutes: Optional[int] = None
+    num_stops: Optional[int] = None
 
 class SearchResponse(BaseModel):
     origin: str

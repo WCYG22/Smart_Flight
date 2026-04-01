@@ -1,11 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
+from typing import List, Dict
 from .schemas import SearchRequest, SearchResponse, FlightLegSchema, MultiLegSearchRequest, MultiLegSearchResponse, ItinerarySchema, ConnectionSchema
 from .airlabs_service import fetch_flights
 from .risk_calculator import compute_risk
 from .connection_analyzer import analyze_connection, calculate_itinerary_risk
 from .alternative_routes import find_alternative_routes, get_route_recommendations
+from .ranking_engine import rank_itineraries
 
 app = FastAPI(title="SmartFlight – Phase 2 Multi-Leg")
 
@@ -60,12 +61,14 @@ def search_flights(req: SearchRequest):
 def search_multi_leg(req: MultiLegSearchRequest):
     """
     Search for multi-leg itineraries with connection risk analysis.
+    F007: Itinerary Ranking Engine - Results are ranked by composite score
+    F008: Ranked Results Display - Best options appear at top
     """
     try:
         if len(req.legs) > 3:
             raise HTTPException(status_code=400, detail="Maximum 3 legs allowed")
         
-        itineraries: List[ItinerarySchema] = []
+        itineraries_data: List[Dict] = []
         
         # Generate 3-5 sample itineraries
         num_itineraries = 4
@@ -125,13 +128,42 @@ def search_multi_leg(req: MultiLegSearchRequest):
                     )
                 )
             
+            itinerary_dict = {
+                "flights": [f.dict() for f in all_flights],
+                "connections": [c.dict() for c in connections],
+                "overall_risk_level": itinerary_risk["risk_level"],
+                "overall_reliability_score": itinerary_risk["reliability_score"],
+                "overall_disruption_probability": itinerary_risk["disruption_probability"]
+            }
+            
+            itineraries_data.append(itinerary_dict)
+        
+        # F007: Rank itineraries by composite score
+        ranked_itineraries = rank_itineraries(itineraries_data)
+        
+        # Convert to response format
+        itineraries: List[ItinerarySchema] = []
+        for ranked_item in ranked_itineraries:
+            flights_list = []
+            for flight_data in ranked_item["flights"]:
+                flights_list.append(FlightLegSchema(**flight_data))
+            
+            connections_list = []
+            for conn_data in ranked_item["connections"]:
+                connections_list.append(ConnectionSchema(**conn_data))
+            
             itineraries.append(
                 ItinerarySchema(
-                    flights=all_flights,
-                    connections=connections,
-                    overall_risk_level=itinerary_risk["risk_level"],
-                    overall_reliability_score=itinerary_risk["reliability_score"],
-                    overall_disruption_probability=itinerary_risk["disruption_probability"]
+                    flights=flights_list,
+                    connections=connections_list,
+                    overall_risk_level=ranked_item["overall_risk_level"],
+                    overall_reliability_score=ranked_item["overall_reliability_score"],
+                    overall_disruption_probability=ranked_item["overall_disruption_probability"],
+                    rank=ranked_item.get("rank"),
+                    rank_label=ranked_item.get("rank_label"),
+                    ranking_score=ranked_item.get("ranking_score"),
+                    journey_duration_minutes=ranked_item.get("journey_duration_minutes"),
+                    num_stops=ranked_item.get("num_stops")
                 )
             )
         

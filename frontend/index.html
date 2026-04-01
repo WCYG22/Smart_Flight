@@ -599,6 +599,153 @@
             margin-bottom: 12px;
         }
 
+        /* Ranked Results */
+        .ranked-itinerary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #0066cc;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .ranked-itinerary-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .ranked-itinerary-card.rank-1 {
+            border-left-color: #ffd700;
+            background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
+        }
+
+        .ranked-itinerary-card.rank-2 {
+            border-left-color: #c0c0c0;
+        }
+
+        .ranked-itinerary-card.rank-3 {
+            border-left-color: #cd7f32;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .rank-badge.rank-1 {
+            background: #ffd700;
+            color: #1a1a1a;
+        }
+
+        .rank-badge.rank-2 {
+            background: #c0c0c0;
+            color: #1a1a1a;
+        }
+
+        .rank-badge.rank-3 {
+            background: #cd7f32;
+            color: white;
+        }
+
+        .rank-badge.rank-other {
+            background: #e0e0e0;
+            color: #1a1a1a;
+        }
+
+        .itinerary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .itinerary-score {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0066cc;
+        }
+
+        .score-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .itinerary-flights {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .flight-segment {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .flight-segment-arrow {
+            color: #0066cc;
+            margin: 0 4px;
+        }
+
+        /* Tabs */
+        .search-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .search-tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .search-tab:hover {
+            color: #0066cc;
+        }
+
+        .search-tab.active {
+            color: #0066cc;
+            border-bottom-color: #0066cc;
+        }
+
+        .search-tab-content {
+            display: none;
+        }
+
+        .search-tab-content.active {
+            display: block;
+        }
+
         .flight-preview-header {
             display: flex;
             justify-content: space-between;
@@ -850,23 +997,61 @@
         <div class="demo-container">
             <div class="search-card">
                 <h3>Search Flights</h3>
-                <form id="searchForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="origin">From</label>
-                            <input type="text" id="origin" placeholder="e.g., KUL" required>
+                
+                <!-- Search Tabs -->
+                <div class="search-tabs">
+                    <button class="search-tab active" onclick="switchSearchTab('single')">Single Flight</button>
+                    <button class="search-tab" onclick="switchSearchTab('multi')">Multi-Leg</button>
+                </div>
+
+                <!-- Single Flight Search -->
+                <div id="singleFlightTab" class="search-tab-content active">
+                    <form id="searchForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="origin">From</label>
+                                <input type="text" id="origin" placeholder="e.g., KUL" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="destination">To</label>
+                                <input type="text" id="destination" placeholder="e.g., HKG" required>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="destination">To</label>
-                            <input type="text" id="destination" placeholder="e.g., HKG" required>
+                            <label for="date">Date</label>
+                            <input type="date" id="date" required>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Date</label>
-                        <input type="date" id="date" required>
-                    </div>
-                    <button type="submit" class="search-submit">Search Flights</button>
-                </form>
+                        <button type="submit" class="search-submit">Search Flights</button>
+                    </form>
+                </div>
+
+                <!-- Multi-Leg Search -->
+                <div id="multiLegTab" class="search-tab-content">
+                    <form id="multiLegForm">
+                        <div id="legsContainer">
+                            <div class="leg-form" data-leg="0">
+                                <div style="margin-bottom: 12px; font-weight: 600; color: #0066cc;">Leg 1</div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>From</label>
+                                        <input type="text" class="leg-origin" placeholder="e.g., KUL" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>To</label>
+                                        <input type="text" class="leg-destination" placeholder="e.g., SIN" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-secondary" onclick="addLeg()" style="width: 100%; margin-bottom: 16px;">+ Add Leg</button>
+                        <div class="form-group">
+                            <label for="multiDate">Travel Date</label>
+                            <input type="date" id="multiDate" required>
+                        </div>
+                        <button type="submit" class="search-submit">Search Itineraries</button>
+                    </form>
+                </div>
+
                 <div id="errorContainer"></div>
             </div>
 
@@ -874,6 +1059,19 @@
                 <h4>Available Flights</h4>
                 <div id="flightResults"></div>
             </div>
+        </div>
+    </section>
+
+    <!-- Ranked Results Section (F008) -->
+    <section class="demo-section" id="rankedResultsSection" style="display: none;">
+        <div class="demo-header">
+            <h2>Best Itineraries for Your Trip</h2>
+            <p>Ranked by reliability, journey time, and number of stops</p>
+        </div>
+
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div id="rankedResultsContainer"></div>
+            <button class="btn-primary" onclick="backToSearch()" style="margin-top: 20px;">← Back to Search</button>
         </div>
     </section>
 
@@ -934,6 +1132,109 @@
 
             await searchFlights(origin, destination, date);
         });
+
+        // Tab switching
+        function switchSearchTab(tab) {
+            document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.search-tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab === 'single' ? 'singleFlightTab' : 'multiLegTab').classList.add('active');
+        }
+
+        // Add leg to multi-leg search
+        let legCount = 1;
+        function addLeg() {
+            if (legCount >= 3) {
+                alert('Maximum 3 legs allowed');
+                return;
+            }
+            
+            legCount++;
+            const container = document.getElementById('legsContainer');
+            const legForm = document.createElement('div');
+            legForm.className = 'leg-form';
+            legForm.setAttribute('data-leg', legCount - 1);
+            legForm.innerHTML = `
+                <div style="margin-bottom: 12px; font-weight: 600; color: #0066cc;">Leg ${legCount}</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>From</label>
+                        <input type="text" class="leg-origin" placeholder="e.g., SIN" required>
+                    </div>
+                    <div class="form-group">
+                        <label>To</label>
+                        <input type="text" class="leg-destination" placeholder="e.g., BKK" required>
+                    </div>
+                </div>
+                <button type="button" class="btn-secondary" onclick="removeLeg(this)" style="width: 100%; margin-bottom: 12px; padding: 8px;">Remove Leg</button>
+            `;
+            container.appendChild(legForm);
+        }
+
+        function removeLeg(button) {
+            button.closest('.leg-form').remove();
+            legCount--;
+        }
+
+        // Multi-leg search
+        document.getElementById('multiLegForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const legs = [];
+            document.querySelectorAll('.leg-form').forEach(legForm => {
+                const origin = legForm.querySelector('.leg-origin').value.trim().toUpperCase();
+                const destination = legForm.querySelector('.leg-destination').value.trim().toUpperCase();
+                if (origin && destination) {
+                    legs.push({ origin, destination });
+                }
+            });
+            
+            const date = document.getElementById('multiDate').value;
+            
+            if (legs.length === 0 || !date) {
+                showError('Please fill in all fields');
+                return;
+            }
+            
+            await searchMultiLeg(legs, date);
+        });
+
+        async function searchMultiLeg(legs, date) {
+            const resultsContainer = document.getElementById('flightResults');
+            const errorContainer = document.getElementById('errorContainer');
+            const resultsPreview = document.getElementById('resultsPreview');
+            const rankedSection = document.getElementById('rankedResultsSection');
+            
+            errorContainer.innerHTML = '';
+            resultsContainer.innerHTML = '<div class="loading">Searching itineraries...</div>';
+            resultsPreview.classList.add('active');
+
+            try {
+                const response = await fetch(API_BASE + '/search-itinerary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ legs, date })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Backend error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Ranked itineraries:', data.itineraries);
+                
+                // F008: Display ranked results
+                displayRankedResults(data.itineraries);
+                rankedSection.style.display = 'block';
+                resultsPreview.classList.remove('active');
+                rankedSection.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Search error:', error);
+                showError('Failed to search itineraries: ' + error.message);
+                resultsContainer.innerHTML = '';
+            }
+        }
 
         async function searchFlights(origin, destination, date) {
             const resultsContainer = document.getElementById('flightResults');
@@ -1031,6 +1332,7 @@
 
             try {
                 console.log('Fetching alternatives for:', origin, destination, date);
+                console.log('API Base:', API_BASE);
                 
                 // Fetch alternatives
                 const altResponse = await fetch(API_BASE + '/alternatives', {
@@ -1043,10 +1345,11 @@
                 
                 if (!altResponse.ok) {
                     const errorText = await altResponse.text();
+                    console.error('Alternatives error response:', errorText);
                     throw new Error(`Failed to fetch alternatives: ${altResponse.status} - ${errorText}`);
                 }
                 const altData = await altResponse.json();
-                console.log('Alternatives data:', altData);
+                console.log('Alternatives data received:', altData);
 
                 // Fetch recommendations
                 const recResponse = await fetch(API_BASE + '/recommendations', {
@@ -1059,15 +1362,16 @@
                 
                 if (!recResponse.ok) {
                     const errorText = await recResponse.text();
+                    console.error('Recommendations error response:', errorText);
                     throw new Error(`Failed to fetch recommendations: ${recResponse.status} - ${errorText}`);
                 }
                 const recData = await recResponse.json();
-                console.log('Recommendations data:', recData);
+                console.log('Recommendations data received:', recData);
 
-                displayAlternatives(altData.alternatives);
+                displayAlternatives(altData.alternatives || []);
                 displayRecommendations(recData);
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error in showAlternatives:', error);
                 alternativesContainer.innerHTML = `<div class="error-message">Failed to load alternatives: ${error.message}</div>`;
                 recommendationsContainer.innerHTML = '';
             }
@@ -1160,8 +1464,76 @@
             });
         }
 
+        // F008: Display ranked itineraries
+        function displayRankedResults(itineraries) {
+            const container = document.getElementById('rankedResultsContainer');
+            container.innerHTML = '';
+
+            if (!itineraries || itineraries.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">No itineraries found.</p>';
+                return;
+            }
+
+            itineraries.forEach((itinerary, index) => {
+                const rankClass = `rank-${itinerary.rank || index + 1}`;
+                const rankBadgeClass = itinerary.rank ? `rank-${itinerary.rank}` : 'rank-other';
+                
+                const card = document.createElement('div');
+                card.className = `ranked-itinerary-card ${rankClass}`;
+                
+                const flights = itinerary.flights || [];
+                const flightSegments = flights.map(f => `${f.origin} → ${f.destination}`).join(' → ');
+                const journeyHours = Math.floor((itinerary.journey_duration_minutes || 0) / 60);
+                const journeyMins = (itinerary.journey_duration_minutes || 0) % 60;
+                
+                card.innerHTML = `
+                    <div class="rank-badge ${rankBadgeClass}">${itinerary.rank_label || `#${index + 1}`}</div>
+                    
+                    <div class="itinerary-header">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">${flightSegments}</div>
+                            <div style="font-size: 13px; color: #666;">${itinerary.num_stops || 0} stop${(itinerary.num_stops || 0) !== 1 ? 's' : ''}</div>
+                        </div>
+                        <div class="itinerary-score">
+                            <div class="score-item">
+                                <div class="score-value">${itinerary.ranking_score || 0}</div>
+                                <div class="score-label">Score</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-value">${itinerary.overall_reliability_score || 0}%</div>
+                                <div class="score-label">Reliability</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-value">${journeyHours}h ${journeyMins}m</div>
+                                <div class="score-label">Duration</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="itinerary-flights">
+                        ${flights.map((f, i) => `
+                            <div class="flight-segment">
+                                <strong>${f.flight_number}</strong> • ${f.airline}
+                                <span class="flight-segment-arrow">→</span>
+                                ${f.origin} to ${f.destination}
+                                <span class="risk-badge ${f.risk_level.toLowerCase()}">${f.risk_level}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; font-size: 13px; color: #666;">
+                        <span>Risk: <strong>${itinerary.overall_risk_level}</strong></span>
+                        <span>Disruption: <strong>${Math.round((itinerary.overall_disruption_probability || 0) * 100)}%</strong></span>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
         function backToSearch() {
             document.getElementById('alternativesSection').style.display = 'none';
+            document.getElementById('rankedResultsSection').style.display = 'none';
             document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
